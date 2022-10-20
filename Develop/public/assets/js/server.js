@@ -13,6 +13,9 @@ app.use(express.json()); // Allows json to be read
 app.use(express.urlencoded({ extended: true })); // Allows requests to be read
 app.use(express.static('public')); // Allows access to static files in the public folder
 
+// Returns homepage
+app.get('/', (req, res) => res.sendFile(indexPath));
+
 // Returns notes.html
 app.get('/notes', (req, res) => res.sendFile(notesPath));
 
