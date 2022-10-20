@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 const PORT = process.env.port || 3001;
 let notesPath = path.join(__dirname, '..', '..', 'notes.html');
 let indexPath = path.join(__dirname, '..', '..', 'index.html');
@@ -30,13 +31,14 @@ app.post('/api/notes', (req, res) => {
         }
         else {
             fileData = JSON.parse(data);
-            fileData.push(req.body);
-            console.log(fileData);
+            let newData = { ...req.body, id: uuidv4() }
+            fileData.push(newData);
             fs.writeFile(dbPath, JSON.stringify(fileData, null, 2), (err) => {
                 if (err) {
                     console.log(err);
                 }
                 else {
+                    res.end(JSON.stringify(newData));
                     console.log("Note logged.");
                 }
             });  
@@ -45,11 +47,9 @@ app.post('/api/notes', (req, res) => {
     else {
         res.status(500).json('Error in posting note');
     }
-    res.end(JSON.stringify(req.body));
+    //res.end(JSON.stringify(req.body));
 });
 
 app.listen(PORT, () =>
     console.log(`Listening for requests on port ${PORT}! 🏎️`)
 );
-
-// To turn on nodemon: npx nodemon server.js
