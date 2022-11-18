@@ -1,5 +1,8 @@
-const dbPath = require('../db/db.json');
+const path = require('path');
 const router = require('express').Router();
+const fs = require("fs");
+const { v4: uuidv4 } = require('uuid');
+let dbPath = path.join(__dirname, '..', 'db', 'db.json');
 
 // Returns notes from db.json
 router.get('/notes', (req, res) => {
